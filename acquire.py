@@ -68,26 +68,29 @@ def get_starwars_data(starwars_df):
     if os.path.isfile(filename):
         return pd.read_csv(filename)
 
-def get_power_data():
-    '''
-    This function acquires the Open Power Systems Data for Germany csv
-    '''
-    filename = 'opsd_germany_daily.csv'
-
-    # Verify if file exists
-    if os.path.isfile(filename):
-        return pd.read_csv(filename)
-    # Download data if file doesn't exist
+def get_germany_data(filename="opsd_germany_daily.csv"):
+    """
+    This function will:
+    - Check local directory for csv file
+        - return if exists
+    - If csv doesn't exists:
+        - create a df
+        - write df to csv
+    - Output zillow df
+    """
+    if os.path.exists(filename):
+        df = pd.read_csv(filename, index_col=0) 
+        print('Found CSV')
+        return df
+    
     else:
         url = "https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv"
-        try:
-            df = pd.read_csv(url)
-            df.to_csv(filename, index=False)
-            print("Data acquired and saved successfully.")
-            return df
-        except Exception as e:
-            print("Error while downloading the data:", e)
-            return None
-get_power_data()
+        df = pd.read_csv(url)
+        #want to save to csv
+        df.to_csv(filename)
+        print('Creating CSV')
+        return df
+
+
 
 
